@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+		<style>
+			/**{
+				text-decoration: line-through;
+			}*/
+		</style>
+	</head>
+	<body>
+		<div class="app">
+			<input type="text" class="str" v-model="thing"/><button @click="addthing">添加</button>
+			<br />
+			<ol @click="finish"></ol>
+		</div>
+		
+		<script type="text/javascript">
+			var app=new Vue({
+				el:".app",
+				data:{
+					thing:""
+				},
+				methods:{
+					addthing:function(){
+						var ol=document.querySelector("ol");
+						var str=document.querySelector(".str");
+						var newli=document.createElement("li");
+						if (str.value=="") {
+							alert("内容不能为空！！！")
+						} else{
+							newli.innerText=str.value;
+							ol.appendChild(newli);
+							str.value=""
+						console.log(222)
+							
+						}
+					},
+					finish:function(e){
+						console.log(111)
+						console.log(e)
+						if (e.target.nodeName=="LI") {
+							e.target.style.textDecoration="line-through"
+						}else{
+							e.target.style.textDecoration=""
+						}
+					}
+					
+				}
+			})
+			
+			
+			
+		</script>
+	</body>
+</html>
