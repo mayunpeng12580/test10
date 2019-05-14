@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/vue.js"></script>
+	</head>
+
+	<body>
+		<div class="app">
+			<ul>
+				<li v-for="(item,index) in product" :key="index">
+					<h3><input type="checkbox" v-model="item.select" @change="select(index,item.select)"/>物品：{{item.title}} </h3> 价格：{{item.price}} 数量：<button @click="item.count++">+</button> {{item.count}}
+					<button @click="item.count=item.count<2?1:--item.count">-</button></li>
+			</ul>
+			全选/全不选<input type="checkbox" v-model="all" @change="changeall" />
+			<p>总件数{{sum}}</p>
+			<p>总价钱{{total}}</p>
+			<p>{{selected}}</p>
+
+		</div>
+
+		<script type="text/javascript">
+			var app = new Vue({
+				el: ".app",
+				data: {
+					product: [
+						{ title: "小黄鸭", price: 50, count: 2, select: false },
+						{ title: "小红鸭", price: 10, count: 3, select: false },
+						{ title: "小绿鸭", price: 100, count: 4, select: false },
+					],
+					all: false,
+					selected: []
+				},
+				methods: {
+					select: function(index, flag) {
+						if(flag) {
+							this.selected.push(index)
+						} else {
+							var i = 0
+							this.selected.forEach(function(item, inx) {
+								if(item == index) {
+									i = inx
+								}
+
+							})
+							this.selected.splice(i, 1)
+
+						}
+					},
+					changeall: function() {
+						var stp = []
+						if(this.all) {
+							this.product.forEach(function(item, index) {
+								item.select = true
+								stp.push(index)
+							})
+							this.selected = stp
+						} else {
+							this.selected = []
+							this.product.forEach(function(item, index) {
+								item.select = false
+
+							})
+						}
+					}
+
+				},
+				computed: {
+					sum: function() {
+
+						var n = 0
+						this.product.forEach(function(item) {
+							if(item.select) {
+								n += item.count
+							}
+						})
+
+						return n
+					},
+					total: function() {
+
+						var n = 0
+						this.product.forEach(function(item) {
+							if(item.select) {
+								n += item.count * item.price
+							}
+						})
+						return n
+
+					}
+				},
+				watch: {
+					selected: function(val) {
+						if(val.length == this.product.length) {
+							this.all = true
+						} else {
+							this.all = false
+
+						}
+
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>
