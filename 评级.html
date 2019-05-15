@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+		<script type="text/javascript" src="js/jquery-2.1.0.js" ></script>
+		<style type="text/css">
+			.box{
+				width: 200px;
+				text-align: center;
+			}
+			
+			.red{
+				color: red;
+			}
+			
+			ul li{
+				display: inline-block;
+				cursor:pointer;
+			}
+			
+		</style>
+		
+	</head>
+	<body>
+		<div class="app">
+			<check_box>
+			</check_box>
+		</div>
+		
+		<script type="text/javascript">
+			var li_list=document
+			Vue.component("check_box",{
+				template:"<div class='box'  @click='change_color'>\
+							<ul>\
+								<li :class='{red:isRed}' id='1'>★</li>\
+								<li :class='{red:isRed}' id='2'>★</li>\
+								<li :class='{red:isRed}' id='3'>★</li>\
+								<li :class='{red:isRed}' id='4'>★</li>\
+								<li :class='{red:isRed}' id='5'>★</li>\
+							</ul>\
+						</div>",
+				data:function(){
+					return {
+						isRed:false,
+						arr:[]
+					}
+				},
+				methods:{
+					change_color:function(e){
+						var li_list=document.querySelectorAll("li")
+						console.log(e)
+						var nowId=e.target.id
+						for(var i=0;i<li_list.length;i++){
+							if((li_list[i].id-0)<=(nowId-0)){
+								li_list[i].style.color="red"
+							}else{
+								li_list[i].style.color=""
+							}
+						}
+					}
+				}
+			})
+			var app=new Vue({
+				el:".app",
+				data:{}
+			})
+			
+			
+		</script>
+		
+	</body>
+</html>
