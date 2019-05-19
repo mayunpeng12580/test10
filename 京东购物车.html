@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+	</head>
+	<body>
+		<div class="app">
+			<ul>
+				<li v-for="(item,index) in arr" :key="index"><input type="checkbox" v-model="item.check" @click="allchecked(index,item.check)"/>{{item.title}}--{{item.price}}--
+					<button @click="item.count++">+</button>{{item.count}}<button @click="item.count=item.count<2?1:--item.count">-</button>
+				</li>
+			</ul>
+			<input type="checkbox" v-model="checked" @click="totalchecked" />全选/不全选
+			<p>总件数:{{sum}}</p>
+			<p>总钱数：{{total}}</p>
+			<p>{{all}}</p>
+		</div>
+		
+		
+		
+		
+		<script type="text/javascript">
+			var app=new Vue({
+				el:".app",
+				data:{
+					arr:[
+						{title:"小黄鸭",price:10,count:5,check:false},
+						{title:"小白鸭",price:100,count:1,check:false},
+						{title:"小绿鸭",price:50,count:2,check:false},
+						{title:"小红鸭",price:20,count:5,check:false}
+					],
+					checked:false,
+					all:[]
+				},
+				methods:{
+					allchecked:function(index,flag){
+						if (flag) {
+							this.all.push(index)
+						} else{
+							var i=0;
+							this.all.forEach(function(item,inx){
+								if (item==index) {
+									i=inx
+								}
+							})
+							this.all.splice(i,1)
+						}
+					},
+					totalchecked:function(){
+						var stp=[]
+						if (this.checked) {
+							this.arr.forEach(function(item,index){
+								item.check=true;
+								stp.push(index)
+							})
+							this.all=stp
+						} else{
+							this.arr.forEach(function(item,index){
+								item.check=false;
+								this.all=[]
+							})
+						}
+					}
+				},
+				computed:{
+					sum:function(){
+						var n=0;
+						this.arr.forEach(function(item,index){
+							if (item.check) {
+								n+=item.count
+							}
+						})
+						return n
+					},
+					total:function(){
+						var n=0;
+						this.arr.forEach(function(item,index){
+							if(item.check){
+								n+=item.count*item.price
+							}
+						})
+						return n
+					}
+					
+				},
+				watch:{
+					all:function(val){
+						if(this.arr.length==val.length){
+							this.checked=true
+						}else{
+							this.checked=false
+						}
+					}
+					
+				}
+			})
+			
+			
+		</script>
+	</body>
+</html>

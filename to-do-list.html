@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="js/vue.js" ></script>
+		<title></title>
+		<style type="text/css">
+			.finish{
+				text-decoration: line-through;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<input type="text"  v-model="todo" @keyup.enter.exact="addToDo" /><button  @click="addToDo">添加</button>
+			<ul>
+				<li v-for="(item,index) in arr"  :key="index" :class="{finish:item.finished}"   @click="finish(index,$event)">{{item.todo}}</li>
+			</ul>
+		</div>
+		
+		
+		<script type="text/javascript">
+			var app=new Vue({
+				el:"#app",
+				data:{
+					arr:[],
+					todo:""
+					,
+				},methods:{
+					addToDo:function(){
+						if (this.todo=="") {
+							alert("内容不能为空！！")
+						} else{
+							this.arr.push({todo:this.todo,finished:false});
+							this.todo=""
+						}
+						
+					},finish:function(index,e){
+						
+						this.arr[index].finished=true
+					}
+				}
+			})
+			
+			
+		</script>
+	</body>
+</html>

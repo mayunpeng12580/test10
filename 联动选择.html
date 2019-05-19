@@ -3,31 +3,27 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<script type="text/javascript" src="js/vue.js" ></script>
+		<script type="text/javascript" src="js/vue.js"></script>
 		<style type="text/css">
-			.check-box {
+			.bgdimg{
 				display: inline-block;
 				width: 20px;
 				height: 20px;
 				background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoBAMAAAB+0KVeAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAkUExURUdwTJqampmZmZmZmZubm5ubm6KiopeXl5mZmZmZmaKiopmZmVmXLrgAAAALdFJOUwBD8KiAagslwtYWexMYygAAAOVJREFUKM9jYICAUotJms3hDMiAy3M3GExZgBBjc9qtHFiWLmq0WyUBLii02xDCEN6tCBNj2d0IY0rsdoBqtt6KMCl6M8QA5k0CCEFGbQMw7a2O7JCiLWC53QLIghBu0lYUJzNEq4F0N6AKcgD1c2kLoAoyblrAwLKZAQ1YOzBwbkQXlJ7AUK2ALsi0nSHaAF2QeSuDdQC6IOtmhm4BdEHGHQyzC9AF2XcyaCegC7Jtwi6IVTtWi7A6CavjsXoTa4BgDTqsgYw1OrBHHNYoxpoYsCcbrAkMa1LEnmixJ2+sGQE9ywAARBBNCX4Tud8AAAAASUVORK5CYII=);
 				background-size: 20px 20px;
 			}
-			
-			.checked {
+			.red{
 				background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAANlBMVEUAAADpPD3tO0HrPD7qPD7qOz7qPD3pOz7qPD3qPD3pPD7rPD/pQkLzRkbqQEDpPUH/VVXpOz3Rbw31AAAAEXRSTlMA6iuA81DZ07+rpXIjFgw7CVCvuuwAAADZSURBVDjLjdVbrsMgDATQoThAeYTO/jd7fy6ioU7wfCXKEY4lMLimlpyCSEi5VNym+civRN9UdnrhEvHnrzsclbhjdZ438Rf2efM27w9mptOkUndT/eAm/x2dbgfdOQsbijfZQ2lzwf2S8eHf+ugzAvXBvdDHc0V5ci83XgqyyTEjmRwTgskxQEyOAjE5yix9dHfvGGYzfXzUHBPysozumFG4SNWxoC4t6I4ViFepuzi22ZSqo183rutdc9LMR8F+uOzH1T4A9iPFPqTsY88+SO2j2T7szdfHHy1xS+1j0wOxAAAAAElFTkSuQmCC);
+				background-size: 20px 20px;
 			}
-			
 		</style>
 	</head>
 	<body>
 		<div class="app">
-			
-
-			<check-box :val="hobby" value="钓鱼"  @event="select"></check-box>钓鱼
-			<check-box :val="hobby" value="跑步"  @event="select"></check-box>跑步
-			<check-box :val="hobby" value="看书"  @event="select"></check-box>看书
-			<check-box :val="hobby" value="看电影"  @event="select"></check-box>看电影
-
+			<box  v-model="hobby" value="钓鱼"></box>钓鱼
+			<box  v-model="hobby" value="跑步"></box>跑步
+			<box  v-model="hobby" value="看书"></box>看书
+			<box  v-model="hobby" value="看电影"></box>看电影
 			<div>
 				<label> <input type="checkbox" v-model="hobby" value="钓鱼" />钓鱼 </label>
 				<label> <input type="checkbox" v-model="hobby" value="跑步" />跑步 </label>
@@ -35,47 +31,50 @@
 				<label> <input type="checkbox" v-model="hobby" value="看电影" />看电影 </label>
 			</div>
 			<p>{{hobby}}</p>
+			
 		</div>
 		
 		<script type="text/javascript">
-			Vue.component("check-box",{
-				template:"<div class='check-box' :class='{checked:flag}' @click='select'></div>",
+			Vue.component("box",{
+				template:"<div class='bgdimg' :class='{red:isred}' @click='changered'></div>",
 				data:function(){
-					return {
-						arr:[],
-						flag:false
-					}
+						return {
+							arr:[],
+							isred:false
+						}
 				},
-				methods:{
-					select:function(){
-						this.flag=!this.flag
-						if(this.flag){
-							this.arr.push(this.value)
-						}
-						else{
-							var that=this;
-							var index=0;
-							this.arr.forEach(function(item,inx){
-								if(item==that.value){
-									index=inx
-								}
-							})
-							this.arr.splice(index,1)
-						}
-						this.$enit('event',this.arr)
-					}
-					
+				model:{
+					prop:"val",
+					event:"input"
 				},
 				props:{
 					val:{
 						type:Array,
 						default:function(){
-							return [];
-						},
-						required: true
+							return []
+						}
 					},
 					value:{
 						default:""
+					}
+				},
+				methods:{
+					changered:function(){
+						this.isred=!this.isred;
+						var that=this
+						if (this.isred) {
+							this.arr.push(this.value)
+						} else{
+							var i=0;
+							this.val.forEach(function(item,index){
+								if (item==that.value) {
+									i=index
+								}
+							});
+							this.arr.splice(i,1)
+						};
+						this.$emit("input",this.arr)
+						
 					}
 				},
 				watch:{
@@ -84,23 +83,25 @@
 						var that=this
 						var a=false
 						this.arr.forEach(function(item,index){
-							if (item==that.value) {
-								a=true
-							}
-						});
-						this.flag=a
+						if (item==that.value) {
+							a=true
+						}
+					});
+						this.isred=a
 					}
 				},
 				created:function(){
-					this.arr=this.val
-						var that=this
-						this.arr.forEach(function(item,index){
-							if (item==this.value) {
-								this.flag=true
-							}
-						})
+					this.arr=this.val;
+					var that=this
+					this.arr.forEach(function(item,index){
+						if (item==that.value) {
+							this.isred=true
+						}
+					})
 				}
 			})
+			
+			
 			
 			var app=new Vue({
 				el:".app",
@@ -109,13 +110,11 @@
 					hobby: []
 				},
 				methods:{
-					select:function(val){
+					newarr:function(val){
 						this.hobby=val
 					}
 				}
 			})
-			
-			
 			
 		</script>
 	</body>

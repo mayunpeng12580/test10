@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript" src="js/vue.js" ></script>
+		<style type="text/css">
+			.hui{
+				display: inline-block;
+				color: #333;
+				font-size: 20px;
+			}
+			
+			.red{
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="app">
+			<star v-model="open"></star>
+		</div>
+		<script type="text/javascript">
+			Vue.component("star",{
+				template:"<div @mouseleave='leave'>\
+							<span v-for='n in 5' :key='n' class='hui' :class='{red:val>=n}' @click='enter(n)' @mouseover='hover(n)' >★</span>\
+							</div>",
+				data:function(){
+					return {
+						val:0,
+						tmp:0
+					}
+				},
+				props:{
+					value:{
+						type:Number,
+						default:0
+					}
+				},
+				methods:{
+					enter:function(n){
+						this.val=n
+						this.tmp=n
+					},
+					hover:function(n){
+						this.val=n;
+					},
+					leave:function(){
+						this.val=this.tmp
+					}
+				},
+				created:function(){
+					this.val=this.value
+					
+				},
+				watch:{
+					value:function(val){
+						this.tmp=val
+					}
+				}
+			})
+			
+			
+			
+			var app=new Vue({
+				el:".app",
+				data:{
+					open:2
+				}
+			})
+		</script>
+	</body>
+</html>
